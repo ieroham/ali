@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head><meta charset="utf-8"><title>داستان‌خوان</title></head>
+<body style="font-family:sans-serif;text-align:center;padding:30px;background:#f7f7f7">
+<h1>داستان‌خوان بدون محدودیت</h1>
+<textarea id="t" rows="12" cols="50" placeholder="هرچقدر دلت خواست بنویس..." style="padding:10px;font-size:16px;width:90%;max-width:600px"></textarea><br>
+
+<select id="v" style="padding:8px;margin:15px;font-size:15px">
+  <option value="fa-IR-FaridNeural">فرید - مرد</option>
+  <option value="fa-IR-DilaraNeural">دیلارا - زن</option>
+</select><br>
+
+<button onclick="play()" style="padding:12px 25px;font-size:17px">بخوان</button>
+<p id="s" style="color:#666"></p>
+<audio id="a" controls style="display:block;margin:20px auto;width:90%;max-width:600px"></audio>
+
+<script>
+async function play(){
+  const text=document.getElementById('t').value;
+  const voice=document.getElementById('v').value;
+  const status=document.getElementById('s');
+  if(!text) return;
+  status.textContent="در حال ساخت صدا... صبر کن";
+  const res=await fetch('/tts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,voice})});
+  const blob=await res.blob();
+  document.getElementById('a').src=URL.createObjectURL(blob);
+  document.getElementById('a').play();
+  status.textContent="آماده شد!";
+}
+</script>
+</body>
+</html>
